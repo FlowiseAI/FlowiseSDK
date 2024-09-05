@@ -46,7 +46,7 @@ new FlowiseClient(baseUrl?: string)
 
 #### Methods
 
-##### `predictions.create(params: PredictionParams): Promise<PredictionResponse>`
+##### `createPrediction(params: PredictionParams)`
 
 Creates a new prediction.
 
