@@ -4,7 +4,25 @@ export interface PredictionData {
     overrideConfig?: Record<string, any>;
     chatId?: string;
     streaming?: boolean;
+    history?: IMessage[];
+    uploads?: IFileUpload[];
 }
+
+interface IFileUpload {
+    data?: string;
+    type: string;
+    name: string;
+    mime: string;
+}
+
+interface IMessage {
+    message: string;
+    type: MessageType;
+    role?: MessageType;
+    content?: string;
+}
+
+type MessageType = 'apiMessage' | 'userMessage';
 
 interface FlowiseClientOptions {
     baseUrl?: string;
