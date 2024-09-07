@@ -36,7 +36,7 @@ describe('FlowiseClient', () => {
             streaming: true,
         });
 
-        const chunks: string[] = [];
+        const chunks: any = [];
         for await (const chunk of result) {
             chunks.push(chunk);
         }

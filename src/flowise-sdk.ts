@@ -6,6 +6,21 @@ export interface PredictionData {
     streaming?: boolean;
     history?: IMessage[];
     uploads?: IFileUpload[];
+    leadEmail?: string
+    action?: IAction
+}
+
+interface IAction {
+    id?: string;
+    elements?: Array<{
+        type: string;
+        label: string;
+    }>;
+    mapping?: {
+        approve: string;
+        reject: string;
+        toolCalls: any[];
+    };
 }
 
 interface IFileUpload {
@@ -24,12 +39,17 @@ interface IMessage {
 
 type MessageType = 'apiMessage' | 'userMessage';
 
+export interface StreamResponse {
+    event: string;
+    data: string;
+}
+
 interface FlowiseClientOptions {
     baseUrl?: string;
 }
 
 type PredictionResponse<T extends PredictionData> = T['streaming'] extends true
-    ? AsyncGenerator<string, void, unknown> // Streaming returns an async generator
+    ? AsyncGenerator<StreamResponse, void, unknown> // Streaming returns an async generator
     : Record<string, any>;
 
 export default class FlowiseClient {
