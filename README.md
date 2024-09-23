@@ -39,10 +39,11 @@ The main class for interacting with the Flowise API.
 #### Constructor
 
 ```typescript
-new FlowiseClient(baseUrl?: string)
+new FlowiseClient(baseUrl?: <your-base-url>, apiKey: <chatflow-apikey>)
 ```
 
-- `baseUrl`: Optional. The base URL for the Flowise API. Defaults to 'http://localhost:3000'.
+- `baseUrl`: Optional. The base URL for the Flowise API. Defaults to 'http://localhost:3000'
+- `apiKey`: Optional. The API Key used to access the chatflow
 
 #### Methods
 
@@ -56,6 +57,7 @@ Creates a new prediction.
   - `streaming`: boolean (optional) - Whether to stream the response.
   - `chatId`: string (optional) - Chat ID of the session
   - `overrideConfig`: object (optional) - Override configuration
+  - `history`: array (optional) - Array of prepended messages
 
 
 ## License

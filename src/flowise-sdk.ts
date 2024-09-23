@@ -46,6 +46,7 @@ export interface StreamResponse {
 
 interface FlowiseClientOptions {
     baseUrl?: string;
+    apiKey?: string;
 }
 
 type PredictionResponse<T extends PredictionData> = T['streaming'] extends true
@@ -54,9 +55,11 @@ type PredictionResponse<T extends PredictionData> = T['streaming'] extends true
 
 export default class FlowiseClient {
     private baseUrl: string;
+    private apiKey: string;
 
     constructor(options: FlowiseClientOptions = {}) {
         this.baseUrl = options.baseUrl || 'http://localhost:3000';
+        this.apiKey = options.apiKey || '';
     }
 
     // Method to create a new prediction and handle streaming response
@@ -80,16 +83,21 @@ export default class FlowiseClient {
 
         const predictionUrl = `${this.baseUrl}/api/v1/prediction/${chatflowId}`;
 
+        const options: any = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        };
+        if (this.apiKey) {
+            options.headers['Authorization'] = `Bearer ${this.apiKey}`;
+        }
+
         if (isChatFlowAvailableToStream && streaming) {
             return {
                 async *[Symbol.asyncIterator]() {
-                    const response = await fetch(predictionUrl, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify(data),
-                    });
+                    const response = await fetch(predictionUrl, options);
 
                     if (!response.ok) {
                         throw new Error(
@@ -129,15 +137,6 @@ export default class FlowiseClient {
                 },
             } as unknown as Promise<PredictionResponse<T>>;
         } else {
-            // Make a POST request and handle streaming response
-            const options = {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(data),
-            };
-
             try {
                 const response = await fetch(predictionUrl, options);
                 const resp = await response.json();
